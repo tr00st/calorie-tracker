@@ -1,10 +1,8 @@
 import './index.css'
 import LogView from './LogView'
 import { SupabaseProvider } from './utils/supabase'
-import { AppBar, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
 import {
     createBrowserRouter,
-    Link as RouterLink,
     RouterProvider,
 } from "react-router";
 import AuthHandler from './utils/AuthHandler';
