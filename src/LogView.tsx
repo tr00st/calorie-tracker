@@ -5,16 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogWindow from "./AddQuickLogWindow";
 
 function LogView() {
-    const [foods, setFoods] = useState<any>([]);
     const [logEntries, setLogEntries] = useState<any>([]);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const client = useSupabase();
 
-    async function getFoods() {
-        const { data } = await client.from("foods").select();
-        console.log('Foods loaded: ', data);
-        setFoods(data);
-    }
 
     async function getLogEntries() {
         const { data } = await client
@@ -31,7 +25,6 @@ function LogView() {
     }
 
     useEffect(() => {
-        getFoods();
         getLogEntries();
     }, []);
 
