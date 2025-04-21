@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import React, { createContext, useContext } from 'react';
+import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type SupabaseContextData = {
     client: SupabaseClient
@@ -31,3 +31,27 @@ export const useSupabase = () => {
 
     return context.client;
 };
+
+export const useSession = () => {
+    const [loaded, setLoaded] = useState(false);
+    const [session, setSession] = useState<Session | null>(null);
+    const client = useSupabase();
+
+    useEffect(() => {
+        client.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+            setLoaded(true);
+        })
+        const {
+            data: { subscription },
+        } = client.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        })
+        return () => subscription.unsubscribe()
+    }, []);
+
+    return {
+        loaded: loaded,
+        session: session
+    }
+}

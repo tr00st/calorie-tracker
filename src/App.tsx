@@ -1,20 +1,33 @@
 import './index.css'
 import LogView from './LogView'
 import { SupabaseProvider } from './utils/supabase'
-import { AppBar, CssBaseline, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
 import {
     createBrowserRouter,
+    Link as RouterLink,
     RouterProvider,
 } from "react-router";
 import AuthHandler from './utils/AuthHandler';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import Account from './Account';
+import Root from './Root';
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <LogView />,
-    },
+        Component: Root,
+        children: [
+            {
+                index: true,
+                Component: LogView,
+            },
+            {
+                path: "/account",
+                Component: Account
+            }
+        ]
+    }
 ], {
     basename: import.meta.env.BASE_URL
 });
@@ -22,14 +35,6 @@ const router = createBrowserRouter([
 export default function App() {
     return <SupabaseProvider>
         <LocalizationProvider dateAdapter={AdapterLuxon}>
-            <AppBar position='static'>
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Calorie Counter Xtreme
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <CssBaseline />
             <AuthHandler>
                 <RouterProvider router={router} />
             </AuthHandler>
