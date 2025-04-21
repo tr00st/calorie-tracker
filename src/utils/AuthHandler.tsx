@@ -17,7 +17,7 @@ export default function AuthHandler({ children }: { children: React.ReactNode })
             <Auth
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}
-                providers={[]} // Disable third-party auth
+                providers={['google']} // Disable third-party auth
                 showLinks={false} // Disable registration etc
             />
         </Box>;
