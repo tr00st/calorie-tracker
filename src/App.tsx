@@ -15,7 +15,9 @@ const router = createBrowserRouter([
         path: "/",
         element: <LogView />,
     },
-]);
+], {
+    basename: import.meta.env.BASE_URL
+});
 
 export default function App() {
     return <SupabaseProvider>
