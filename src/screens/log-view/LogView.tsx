@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSupabase } from "../../utils/supabase";
-import { AppBar, Fab, List, ListItem, ListItemText } from "@mui/material";
+import { AppBar, Divider, Fab, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogWindow from "../../AddQuickLogWindow";
 import CurrentDatePicker from "./CurrentDatePicker";
 import { DateTime } from "luxon";
+import { Preview } from "@mui/icons-material";
 
 function LogView() {
-    const [logEntries, setLogEntries] = useState<any>([]);
+    const [logEntries, setLogEntries] = useState<any[] | null>([]);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const client = useSupabase();
 
@@ -35,16 +36,24 @@ function LogView() {
         getLogEntries();
     }, [getLogEntries]);
 
+    const caloriesForLogEntry = (logEntry : any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
+
 
     return (<>
         <AppBar position='static'>
             <CurrentDatePicker selectedDate={filterDate} onChange={(newValue : DateTime) => setFilterDate(newValue)} />
         </AppBar>
         <List>
+            <ListItem>
+                <ListItemText>
+                    Total Calories Today: {logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0)}
+                </ListItemText>
+            </ListItem>
+            <Divider />
             {logEntries
-                .map((logEntry: any) => ({
+                ?.map((logEntry: any) => ({
                     ...logEntry,
-                    calorie_count: logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100
+                    calorie_count: caloriesForLogEntry(logEntry)
                 }))
                 .map((logEntry: any) => (
                     <ListItem key={logEntry.id}>
