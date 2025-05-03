@@ -1,4 +1,4 @@
-import { AppBar, Button, CssBaseline, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, CssBaseline, Link, Toolbar, Typography } from '@mui/material';
 import {
     Outlet,
     Link as RouterLink,
@@ -7,7 +7,7 @@ import {
 const Root = () => {
     return <>
         <CssBaseline />
-        <AppBar position='static'>
+        <AppBar position='fixed' enableColorOnDark>
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     <Link component={RouterLink} underline='none' color="inherit" to="/">
@@ -19,7 +19,9 @@ const Root = () => {
                 </Button>
             </Toolbar>
         </AppBar>
-        <Outlet />
+        <Box sx={{marginTop: '4em'}}>
+            <Outlet />
+        </Box>
     </>;
 };
 
