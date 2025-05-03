@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSupabase } from "../../utils/supabase";
-import { AppBar, Divider, Fab, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import { AppBar, Divider, Fab, List, ListItem, ListItemText } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogWindow from "../../AddQuickLogWindow";
 import CurrentDatePicker from "./CurrentDatePicker";
 import { DateTime } from "luxon";
-import { Preview } from "@mui/icons-material";
 
 function LogView() {
     const [logEntries, setLogEntries] = useState<any[] | null>([]);
