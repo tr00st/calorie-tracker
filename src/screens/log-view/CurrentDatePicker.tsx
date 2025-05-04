@@ -7,13 +7,13 @@ const CurrentDatePicker = (props: {
     onChange : (newValue: DateTime) => void
 }) => {
     return <Toolbar>
-        <IconButton onClick={() => props.onChange(props.selectedDate.plus({days: -1}))}>
+        <IconButton onClick={() => props.onChange(props.selectedDate.plus({days: -1}))} color='inherit'>
             <NavigateBefore />
         </IconButton>
         <Typography variant='h6' component='div' flexGrow='1' textAlign='center'>
             {props.selectedDate.toISODate()}
         </Typography>
-        <IconButton onClick={() => props.onChange(props.selectedDate.plus({days: 1}))}>
+        <IconButton onClick={() => props.onChange(props.selectedDate.plus({days: 1}))} color='inherit'>
             <NavigateNext />
         </IconButton>
     </Toolbar>;
