@@ -7,11 +7,20 @@ import { useSupabase } from '../../utils/supabase';
 const AddQuickLogBody = ({
     onClose,
     onLogAdded,
+    entryDate,
 }: {
     onClose: (() => void);
     onLogAdded: (() => void);
+    entryDate: DateTime;
 }) => {
-    const [timestamp, setTimestamp] = useState<DateTime | null>(DateTime.now());
+    const currentDateTime = DateTime.now();
+    const combinedDateTime = currentDateTime.set({
+        year: entryDate.year,
+        month: entryDate.month,
+        day: entryDate.day,
+    });
+
+    const [timestamp, setTimestamp] = useState<DateTime | null>(combinedDateTime);
     const [description, setDescription] = useState<string>('');
     const [calories, setCalories] = useState<string>('');
     const caloriesRegex = /^[0-9]+$/;
@@ -43,7 +52,9 @@ const AddQuickLogBody = ({
                 description: description,
             });
 
-        console.error(error);
+        if (error) {
+            console.error(error);
+        }
         onLogAdded();
     };
 

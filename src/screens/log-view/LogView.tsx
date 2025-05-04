@@ -97,7 +97,7 @@ function LogView() {
             >
                 <AddIcon />
             </Fab>
-            <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} />
+            <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} entryDate={filterDate} />
         </>
     );
 }
