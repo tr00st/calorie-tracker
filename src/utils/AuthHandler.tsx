@@ -1,6 +1,6 @@
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { useSession, useSupabase } from './supabase'
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { useSession, useSupabase } from './supabase';
 import { Box, Typography } from '@mui/material';
 
 export default function AuthHandler({ children }: { children: React.ReactNode }) {

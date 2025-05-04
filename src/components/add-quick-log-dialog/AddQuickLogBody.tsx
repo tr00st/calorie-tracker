@@ -17,7 +17,7 @@ const AddQuickLogBody = ({
     const caloriesRegex = /^[0-9]+$/;
     const isValidCalorieValue = (value : string) => {
         return caloriesRegex.test(value);
-    }
+    };
     
     /* For later - loading foods to pick from. */
     // const [foods, setFoods] = useState<any>([]);
@@ -44,7 +44,7 @@ const AddQuickLogBody = ({
         
         console.error(error);
         onLogAdded();
-        onClose()
+        onClose();
     };
 
     return <>

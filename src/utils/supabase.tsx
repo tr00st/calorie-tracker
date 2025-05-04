@@ -19,7 +19,7 @@ export const SupabaseProvider = ({ children } : { children : React.ReactNode}) =
         client: supabase
     }}>
         {children}
-    </SupabaseContext.Provider>
+    </SupabaseContext.Provider>;
 };
 
 export const useSupabase = () => {
@@ -41,17 +41,17 @@ export const useSession = () => {
         client.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
             setLoaded(true);
-        })
+        });
         const {
             data: { subscription },
         } = client.auth.onAuthStateChange((_event, session) => {
             setSession(session);
-        })
-        return () => subscription.unsubscribe()
+        });
+        return () => subscription.unsubscribe();
     }, [client.auth]);
 
     return {
         loaded: loaded,
         session: session
-    }
-}
+    };
+};

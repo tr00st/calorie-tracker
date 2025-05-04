@@ -1,5 +1,5 @@
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { useSession, useSupabase } from './utils/supabase'
+import { useSession, useSupabase } from './utils/supabase';
 import { useNavigate } from 'react-router';
 import { Logout } from '@mui/icons-material';
 
@@ -12,7 +12,7 @@ export const Account = () => {
     const signOut = () => {
         supabase.auth.signOut();
         navigate('/');
-    }
+    };
 
     if (!sessionLoaded) {
         return <>Loading</>;
@@ -32,6 +32,6 @@ export const Account = () => {
             </ListItem>
         </List>;
     }
-}
+};
 
 export default Account;

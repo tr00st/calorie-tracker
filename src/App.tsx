@@ -1,6 +1,6 @@
-import './index.css'
-import LogView from './screens/log-view/LogView'
-import { SupabaseProvider } from './utils/supabase'
+import './index.css';
+import LogView from './screens/log-view/LogView';
+import { SupabaseProvider } from './utils/supabase';
 import {
     createBrowserRouter,
     RouterProvider,
