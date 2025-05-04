@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
-import { AppBar, Divider, Fab, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Backdrop, CircularProgress, Collapse, Divider, Fab, List, ListItem, ListItemText, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogDialog from '../../components/add-quick-log-dialog/AddQuickLogDialog';
 import CurrentDatePicker from './CurrentDatePicker';
 import { DateTime } from 'luxon';
+import { TransitionGroup } from 'react-transition-group';
+import FadeBetweenValues from '../../utils/FadeBetweenValues';
 
 function LogView() {
-    const [logEntries, setLogEntries] = useState<any[] | null>([]);
+    const [logEntries, setLogEntries] = useState<any[] | null>(null);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const client = useSupabase();
 
@@ -15,6 +17,7 @@ function LogView() {
     const [filterDate, setFilterDate] = useState(todaysDate);
 
     const getLogEntries = useCallback(async () => {
+        setLogEntries(null);
         const { data } = await client
             .from('log_entries')
             .select(`
@@ -35,31 +38,40 @@ function LogView() {
     }, [getLogEntries]);
 
     const caloriesForLogEntry = (logEntry: any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
+    const caloriesForDay = logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0);
 
     return (
         <>
             <AppBar position="static">
                 <CurrentDatePicker selectedDate={filterDate} onChange={(newValue: DateTime) => setFilterDate(newValue)} />
             </AppBar>
-            <List>
+            <List sx={{ flexGrow: 1 }}>
                 <ListItem>
                     <ListItemText>
-                        Total Calories Today:
-                        {' '}
-                        {logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0)}
+                        <Stack direction="row" gap="0.3rem">
+                            <span>Total Calories Consumed:</span>
+                            <FadeBetweenValues value={caloriesForDay} />
+                        </Stack>
                     </ListItemText>
                 </ListItem>
                 <Divider />
-                {logEntries
-                    ?.map((logEntry: any) => ({
-                        ...logEntry,
-                        calorie_count: caloriesForLogEntry(logEntry),
-                    }))
-                    .map((logEntry: any) => (
-                        <ListItem key={logEntry.id}>
-                            <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? 'Manual Entry'}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
-                        </ListItem>
-                    ))}
+                <Backdrop open={logEntries === null} sx={{ position: 'absolute', padding: '5rem', alignItems: 'start' }} invisible>
+                    <CircularProgress />
+                </Backdrop>
+                <TransitionGroup>
+                    {logEntries
+                        ?.map((logEntry: any) => ({
+                            ...logEntry,
+                            calorie_count: caloriesForLogEntry(logEntry),
+                        }))
+                        .map((logEntry: any) => (
+                            <Collapse>
+                                <ListItem key={logEntry.id}>
+                                    <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? 'Manual Entry'}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
+                                </ListItem>
+                            </Collapse>
+                        ))}
+                </TransitionGroup>
             </List>
             <Fab
                 sx={{
