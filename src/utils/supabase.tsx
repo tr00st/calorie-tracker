@@ -48,7 +48,7 @@ export const useSession = () => {
             setSession(session);
         })
         return () => subscription.unsubscribe()
-    }, []);
+    }, [client.auth]);
 
     return {
         loaded: loaded,
