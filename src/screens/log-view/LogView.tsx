@@ -60,14 +60,25 @@ function LogView() {
                 </Backdrop>
                 <TransitionGroup>
                     {logEntries
-                        ?.map((logEntry: any) => ({
-                            ...logEntry,
-                            calorie_count: caloriesForLogEntry(logEntry),
-                        }))
+                        ?.map((logEntry: any) => {
+                            let label = 'Manual Entry';
+                            if (logEntry.description && logEntry.description !== '') {
+                                label = logEntry.description;
+                            }
+                            else if (logEntry.food_name) {
+                                label = logEntry.food_name;
+                            }
+
+                            return {
+                                ...logEntry,
+                                calorie_count: caloriesForLogEntry(logEntry),
+                                label: label,
+                            };
+                        })
                         .map((logEntry: any) => (
                             <Collapse>
                                 <ListItem key={logEntry.id}>
-                                    <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? 'Manual Entry'}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
+                                    <ListItemText primary={`${logEntry.label}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
                                 </ListItem>
                             </Collapse>
                         ))}
