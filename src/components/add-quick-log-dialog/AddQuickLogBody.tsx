@@ -33,6 +33,8 @@ const AddQuickLogBody = ({
     const supabase = useSupabase();
 
     const addEntry = async () => {
+        onClose();
+        setCalories(''); // Blank the calories field as soon as we start saving, to prevent duplicates.
         const { error } = await supabase
             .from('log_entries')
             .insert({
@@ -43,7 +45,12 @@ const AddQuickLogBody = ({
 
         console.error(error);
         onLogAdded();
-        onClose();
+    };
+
+    const handleSaveOnEnterKey = (event: React.KeyboardEvent<HTMLElement>) => {
+        if (event.key === 'Enter') {
+            addEntry();
+        }
     };
 
     return (
@@ -54,8 +61,21 @@ const AddQuickLogBody = ({
             <DialogContent sx={{ paddingTop: '1em!important' }}>
                 <Stack spacing={1}>
                     <TimePicker value={timestamp} onChange={newValue => setTimestamp(newValue)} />
-                    <TextField label="Quick Set Calories" autoFocus required value={calories} onChange={event => setCalories(event.target.value)} type="number" />
-                    <TextField label="Description" value={description} onChange={event => setDescription(event.target.value)} />
+                    <TextField
+                        label="Quick Set Calories"
+                        autoFocus
+                        required
+                        value={calories}
+                        onChange={event => setCalories(event.target.value)}
+                        type="number"
+                        onKeyDown={handleSaveOnEnterKey}
+                    />
+                    <TextField
+                        label="Description"
+                        value={description}
+                        onChange={event => setDescription(event.target.value)}
+                        onKeyDown={handleSaveOnEnterKey}
+                    />
                 </Stack>
             </DialogContent>
             <DialogActions>
