@@ -4,7 +4,7 @@ import { SupabaseProvider } from './utils/supabase';
 import {
     createBrowserRouter,
     RouterProvider,
-} from "react-router";
+} from 'react-router';
 import AuthHandler from './utils/AuthHandler';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: '/',
         Component: Root,
         children: [
             {
@@ -22,29 +22,31 @@ const router = createBrowserRouter([
                 Component: LogView,
             },
             {
-                path: "/account",
-                Component: Account
-            }
-        ]
-    }
+                path: '/account',
+                Component: Account,
+            },
+        ],
+    },
 ], {
-    basename: import.meta.env.BASE_URL
+    basename: import.meta.env.BASE_URL,
 });
 
 const theme = createTheme({
     colorSchemes: {
-        dark: true
-    }
+        dark: true,
+    },
 });
 
 export default function App() {
-    return <SupabaseProvider>
-        <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterLuxon}>
-                <AuthHandler>
-                    <RouterProvider router={router} />
-                </AuthHandler>
-            </LocalizationProvider>
-        </ThemeProvider>
-    </SupabaseProvider>;
+    return (
+        <SupabaseProvider>
+            <ThemeProvider theme={theme}>
+                <LocalizationProvider dateAdapter={AdapterLuxon}>
+                    <AuthHandler>
+                        <RouterProvider router={router} />
+                    </AuthHandler>
+                </LocalizationProvider>
+            </ThemeProvider>
+        </SupabaseProvider>
+    );
 }

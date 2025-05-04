@@ -8,7 +8,6 @@ export const Account = () => {
     const { loaded: sessionLoaded, session } = useSession();
     const navigate = useNavigate();
 
-
     const signOut = () => {
         supabase.auth.signOut();
         navigate('/');
@@ -16,21 +15,24 @@ export const Account = () => {
 
     if (!sessionLoaded) {
         return <>Loading</>;
-    } else {
-        return <List>
-            <ListItem>
-                <ListItemText primary={`Logged in as: ${session?.user.email}`}></ListItemText>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-                <ListItemButton onClick={() => signOut()}>
-                    <ListItemIcon>
-                        <Logout />
-                    </ListItemIcon>
-                    <ListItemText>Sign Out</ListItemText>
-                </ListItemButton>
-            </ListItem>
-        </List>;
+    }
+    else {
+        return (
+            <List>
+                <ListItem>
+                    <ListItemText primary={`Logged in as: ${session?.user.email}`}></ListItemText>
+                </ListItem>
+                <Divider />
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => signOut()}>
+                        <ListItemIcon>
+                            <Logout />
+                        </ListItemIcon>
+                        <ListItemText>Sign Out</ListItemText>
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        );
     }
 };
 

@@ -4,29 +4,32 @@ import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type SupabaseContextData = {
-    client: SupabaseClient
+    client: SupabaseClient;
 };
 
 const SupabaseContext = createContext<SupabaseContextData | null>(null);
 
-export const SupabaseProvider = ({ children } : { children : React.ReactNode}) => {
+export const SupabaseProvider = ({ children }: { children: React.ReactNode }) => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    
+
     const supabase = createClient(supabaseUrl, supabaseKey);
-    
-    return <SupabaseContext.Provider value={{
-        client: supabase
-    }}>
-        {children}
-    </SupabaseContext.Provider>;
+
+    return (
+        <SupabaseContext.Provider value={{
+            client: supabase,
+        }}
+        >
+            {children}
+        </SupabaseContext.Provider>
+    );
 };
 
 export const useSupabase = () => {
     const context = useContext(SupabaseContext);
-    
+
     if (context === null) {
-        throw new Error("Cannot use useSupabase without context provider");
+        throw new Error('Cannot use useSupabase without context provider');
     }
 
     return context.client;
@@ -52,6 +55,6 @@ export const useSession = () => {
 
     return {
         loaded: loaded,
-        session: session
+        session: session,
     };
 };

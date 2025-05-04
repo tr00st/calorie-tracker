@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSupabase } from "../../utils/supabase";
-import { AppBar, Divider, Fab, List, ListItem, ListItemText } from "@mui/material";
+import { useCallback, useEffect, useState } from 'react';
+import { useSupabase } from '../../utils/supabase';
+import { AppBar, Divider, Fab, List, ListItem, ListItemText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import AddQuickLogDialog from "../../components/add-quick-log-dialog/AddQuickLogDialog";
-import CurrentDatePicker from "./CurrentDatePicker";
-import { DateTime } from "luxon";
+import AddQuickLogDialog from '../../components/add-quick-log-dialog/AddQuickLogDialog';
+import CurrentDatePicker from './CurrentDatePicker';
+import { DateTime } from 'luxon';
 
 function LogView() {
     const [logEntries, setLogEntries] = useState<any[] | null>([]);
@@ -14,10 +14,9 @@ function LogView() {
     const todaysDate = DateTime.now().startOf('day');
     const [filterDate, setFilterDate] = useState(todaysDate);
 
-
     const getLogEntries = useCallback(async () => {
         const { data } = await client
-            .from("log_entries")
+            .from('log_entries')
             .select(`
                 *,
                 ...foods(
@@ -35,43 +34,46 @@ function LogView() {
         getLogEntries();
     }, [getLogEntries]);
 
-    const caloriesForLogEntry = (logEntry : any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
+    const caloriesForLogEntry = (logEntry: any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
 
-
-    return (<>
-        <AppBar position='static'>
-            <CurrentDatePicker selectedDate={filterDate} onChange={(newValue : DateTime) => setFilterDate(newValue)} />
-        </AppBar>
-        <List>
-            <ListItem>
-                <ListItemText>
-                    Total Calories Today: {logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0)}
-                </ListItemText>
-            </ListItem>
-            <Divider />
-            {logEntries
-                ?.map((logEntry: any) => ({
-                    ...logEntry,
-                    calorie_count: caloriesForLogEntry(logEntry)
-                }))
-                .map((logEntry: any) => (
-                    <ListItem key={logEntry.id}>
-                        <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? "Manual Entry"}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
-                    </ListItem>
-                ))}
-        </List>
-        <Fab
-            sx={{
-                position: 'absolute',
-                bottom: 16,
-                right: 16
-            }}
-            onClick={() => setShowAddDialog(true)}
-        >
-            <AddIcon />
-        </Fab>
-        <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} />
-    </>);
+    return (
+        <>
+            <AppBar position="static">
+                <CurrentDatePicker selectedDate={filterDate} onChange={(newValue: DateTime) => setFilterDate(newValue)} />
+            </AppBar>
+            <List>
+                <ListItem>
+                    <ListItemText>
+                        Total Calories Today:
+                        {' '}
+                        {logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0)}
+                    </ListItemText>
+                </ListItem>
+                <Divider />
+                {logEntries
+                    ?.map((logEntry: any) => ({
+                        ...logEntry,
+                        calorie_count: caloriesForLogEntry(logEntry),
+                    }))
+                    .map((logEntry: any) => (
+                        <ListItem key={logEntry.id}>
+                            <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? 'Manual Entry'}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
+                        </ListItem>
+                    ))}
+            </List>
+            <Fab
+                sx={{
+                    position: 'absolute',
+                    bottom: 16,
+                    right: 16,
+                }}
+                onClick={() => setShowAddDialog(true)}
+            >
+                <AddIcon />
+            </Fab>
+            <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} />
+        </>
+    );
 }
 
 export default LogView;

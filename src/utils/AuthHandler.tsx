@@ -9,18 +9,21 @@ export default function AuthHandler({ children }: { children: React.ReactNode })
 
     if (!loaded) {
         return <div>Loading...</div>;
-    } else if (!session) {
-        return <Box>
-            <Typography variant='h5'>
-                Calorie Tracker Xtreme
-            </Typography>
-            <Auth
-                supabaseClient={supabase}
-                appearance={{ theme: ThemeSupa }}
-                providers={['google']} // Disable third-party auth
-                showLinks={false} // Disable registration etc
-            />
-        </Box>;
+    }
+    else if (!session) {
+        return (
+            <Box>
+                <Typography variant="h5">
+                    Calorie Tracker Xtreme
+                </Typography>
+                <Auth
+                    supabaseClient={supabase}
+                    appearance={{ theme: ThemeSupa }}
+                    providers={['google']} // Disable third-party auth
+                    showLinks={false} // Disable registration etc
+                />
+            </Box>
+        );
     }
     else {
         return <>{children}</>;
