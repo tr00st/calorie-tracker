@@ -54,7 +54,7 @@ const AddQuickLogBody = ({
             <DialogContent sx={{ paddingTop: '1em!important' }}>
                 <Stack spacing={1}>
                     <TimePicker value={timestamp} onChange={newValue => setTimestamp(newValue)} />
-                    <TextField label="Quick Set Calories" autoFocus required value={calories} onChange={event => setCalories(event.target.value)} />
+                    <TextField label="Quick Set Calories" autoFocus required value={calories} onChange={event => setCalories(event.target.value)} type="number" />
                     <TextField label="Description" value={description} onChange={event => setDescription(event.target.value)} />
                 </Stack>
             </DialogContent>
