@@ -1,7 +1,6 @@
-import { AppBar, Box, CssBaseline, IconButton, Link, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, CssBaseline, IconButton, Stack, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {
     Outlet,
-    Link as RouterLink,
 } from 'react-router';
 import Menu, { PERSISTENT_MENU_WIDTH } from './components/menu/Menu';
 import { Menu as MenuIcon } from '@mui/icons-material';
@@ -13,30 +12,29 @@ const Root = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
     return (
-        <>
+        <Stack sx={{ minHeight: '100vh' }}>
             <CssBaseline />
             <Menu mobileMenuOpen={mobileMenuOpen} onMobileMenuClose={() => setMobileMenuOpen(false)} />
-            <Box sx={{
+            <Stack sx={{
                 marginLeft: isMobile ? null : PERSISTENT_MENU_WIDTH,
+                flexGrow: '1',
             }}
             >
-                <AppBar position="sticky" enableColorOnDark>
-                    <Toolbar sx={{ gap: 1 }}>
-                        {isMobile && (
+                {isMobile && (
+                    <AppBar position="sticky" enableColorOnDark>
+                        <Toolbar sx={{ gap: 1 }}>
                             <IconButton color="inherit" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                                 <MenuIcon />
                             </IconButton>
-                        ) }
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link component={RouterLink} underline="none" color="inherit" to="/">
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                 Calorie Counter Xtreme
-                            </Link>
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                )}
                 <Outlet />
-            </Box>
-        </>
+            </Stack>
+        </Stack>
     );
 };
 
