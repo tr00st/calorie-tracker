@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSupabase } from "../../utils/supabase";
 import { AppBar, Divider, Fab, List, ListItem, ListItemText } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import AddQuickLogWindow from "../../AddQuickLogWindow";
+import AddQuickLogDialog from "../../components/add-quick-log-dialog/AddQuickLogDialog";
 import CurrentDatePicker from "./CurrentDatePicker";
 import { DateTime } from "luxon";
 
@@ -56,7 +56,7 @@ function LogView() {
                 }))
                 .map((logEntry: any) => (
                     <ListItem key={logEntry.id}>
-                        <ListItemText primary={`${logEntry.food_name ?? "Manual Entry"}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
+                        <ListItemText primary={`${logEntry.description ?? logEntry.food_name ?? "Manual Entry"}, ${logEntry.calorie_count}cal`} secondary={logEntry.timestamp} />
                     </ListItem>
                 ))}
         </List>
@@ -70,7 +70,7 @@ function LogView() {
         >
             <AddIcon />
         </Fab>
-        <AddQuickLogWindow open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} />
+        <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} />
     </>);
 }
 

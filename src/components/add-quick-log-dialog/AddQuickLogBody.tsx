@@ -1,15 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
+import { Button, DialogActions, DialogContent, DialogTitle, Stack, TextField } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import { useSupabase } from "./utils/supabase";
+import { useSupabase } from "../../utils/supabase";
 
-const AddQuickLogWindow = ({
-    open,
+const AddQuickLogBody = ({
     onClose,
     onLogAdded
 } : {
-    open : boolean,
     onClose : (() => void),
     onLogAdded : (() => void)
 }) => {
@@ -49,14 +47,14 @@ const AddQuickLogWindow = ({
         onClose()
     };
 
-    return <Dialog open={open} onClose={() => onClose()}>
+    return <>
         <DialogTitle>
             Add Log Entry
         </DialogTitle>
         <DialogContent sx={{paddingTop: '1em!important'}}>
             <Stack spacing={1}>
                 <TimePicker value={timestamp} onChange={(newValue) => setTimestamp(newValue)} />
-                <TextField label='Quick Set Calories' required value={calories} onChange={(event) => setCalories(event.target.value)} />
+                <TextField label='Quick Set Calories' autoFocus required value={calories} onChange={(event) => setCalories(event.target.value)} />
                 <TextField label='Description' value={description} onChange={(event) => setDescription(event.target.value)} />
             </Stack>
         </DialogContent>
@@ -64,7 +62,7 @@ const AddQuickLogWindow = ({
             <Button variant='contained' disabled={!isValidCalorieValue(calories)} onClick={() => addEntry()}>Add</Button>
             <Button onClick={() => onClose()}>Cancel</Button>
         </DialogActions>
-    </Dialog>;
+    </>;
 };
 
-export default AddQuickLogWindow;
+export default AddQuickLogBody;
