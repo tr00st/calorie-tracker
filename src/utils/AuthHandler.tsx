@@ -21,6 +21,7 @@ export default function AuthHandler({ children }: { children: React.ReactNode })
                     appearance={{ theme: ThemeSupa }}
                     providers={['google']} // Disable third-party auth
                     showLinks={false} // Disable registration etc
+                    redirectTo={import.meta.env.VITE_AUTH_REDIRECT_URI}
                 />
             </Box>
         );
