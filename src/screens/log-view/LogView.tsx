@@ -79,11 +79,8 @@ function LogView() {
                         .map((logEntry: { label: string; calorie_count: number; timestamp: string; id: string }) => (
                             <Collapse>
                                 <LogViewListItem
+                                    {...logEntry}
                                     key={logEntry.id}
-                                    id={logEntry.id}
-                                    label={logEntry.label}
-                                    calorie_count={logEntry.calorie_count}
-                                    timestamp={logEntry.timestamp}
                                     onEntryUpdated={getLogEntries}
                                 />
                             </Collapse>
