@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
-import { Backdrop, CircularProgress, Collapse, Divider, Fab, List } from '@mui/material';
+import { Backdrop, CircularProgress, Collapse, Fab, List } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { TransitionGroup } from 'react-transition-group';
 import FoodsViewListItem from './FoodsViewListItem';
