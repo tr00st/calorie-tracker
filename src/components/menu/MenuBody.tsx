@@ -1,7 +1,7 @@
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Link } from 'react-router';
 import { PERSISTENT_MENU_WIDTH } from './Menu';
-import { List as ListIcon, PersonOutline } from '@mui/icons-material';
+import { FoodBank, List as ListIcon, PersonOutline } from '@mui/icons-material';
 
 const MenuBody = ({ onMenuItemSelected }: { onMenuItemSelected: { (): void } }) => {
     return (
@@ -17,6 +17,14 @@ const MenuBody = ({ onMenuItemSelected }: { onMenuItemSelected: { (): void } }) 
                         <ListIcon />
                     </ListItemIcon>
                     <ListItemText>Log</ListItemText>
+                </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemButton component={Link} to="/foods" onClick={onMenuItemSelected}>
+                    <ListItemIcon>
+                        <FoodBank />
+                    </ListItemIcon>
+                    <ListItemText>Foods</ListItemText>
                 </ListItemButton>
             </ListItem>
             <Divider />

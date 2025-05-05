@@ -1,5 +1,5 @@
 import './index.css';
-import LogView from './screens/log-view/LogView';
+import LogView from './screens/log/LogView';
 import { SupabaseProvider } from './utils/supabase';
 import {
     createBrowserRouter,
@@ -11,6 +11,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import Account from './Account';
 import Root from './Root';
 import { createTheme, ThemeProvider } from '@mui/material';
+import FoodsView from './screens/foods/FoodsView';
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: LogView,
+            },
+            {
+                path: '/foods',
+                Component: FoodsView,
             },
             {
                 path: '/account',
