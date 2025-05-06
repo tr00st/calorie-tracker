@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
 import { AppBar, Backdrop, CircularProgress, Collapse, Divider, Fab, List, ListItem, ListItemText, Stack } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -41,12 +41,38 @@ function LogView() {
     const caloriesForLogEntry = (logEntry: any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
     const caloriesForDay = logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0);
 
+    const [touchStartX, setTouchStartX] = useState<number>(-1);
+    const [touchStartY, setTouchStartY] = useState<number>(-1);
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLUListElement>) => {
+        const touch = e.touches[0];
+        console.log(touch);
+        setTouchStartX(touch.clientX);
+        setTouchStartY(touch.clientY);
+    };
+    const handleTouchEnd = (e: React.TouchEvent<HTMLUListElement>) => {
+        const touch = e.changedTouches[0];
+        const movementX = touchStartX - touch.clientX;
+        const movementY = touchStartY - touch.clientY;
+        const magnitudeX = Math.abs(movementX);
+        const magnitudeY = Math.abs(movementY);
+
+        if (
+            magnitudeX < 10
+            || magnitudeX < magnitudeY
+        ) {
+            return; // Doesn't look like a horizontal swipe
+        }
+
+        setFilterDate(filterDate.plus({ days: Math.sign(movementX) }));
+    };
+
     return (
         <>
             <AppBar position="static">
                 <CurrentDatePicker selectedDate={filterDate} onChange={(newValue: DateTime) => setFilterDate(newValue)} />
             </AppBar>
-            <List sx={{ flexGrow: 1 }}>
+            <List sx={{ flexGrow: 1 }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                 <ListItem>
                     <ListItemText>
                         <Stack direction="row" gap="0.3rem">
