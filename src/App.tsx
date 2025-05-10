@@ -12,6 +12,7 @@ import Account from './Account';
 import Root from './Root';
 import { createTheme, ThemeProvider } from '@mui/material';
 import FoodsView from './screens/foods/FoodsView';
+import AboutView from './screens/about/AboutView';
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/account',
                 Component: Account,
+            },
+            {
+                path: '/about',
+                Component: AboutView,
             },
         ],
     },
