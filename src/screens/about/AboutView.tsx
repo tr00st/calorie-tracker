@@ -1,5 +1,4 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Stack, Typography } from '@mui/material';
-import { Link } from 'react-router';
 
 function AboutView() {
     return (
@@ -13,7 +12,7 @@ function AboutView() {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button component={Link} to="https://github.com/tr00st/calorie-tracker">
+                    <Button href="https://github.com/tr00st/calorie-tracker" target="_blank">
                         GitHub Repo
                     </Button>
                 </CardActions>
@@ -27,7 +26,7 @@ function AboutView() {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button component={Link} to="/third-party-licenses.txt" reloadDocument>
+                    <Button href={`${import.meta.env.BASE_URL}/third-party-licenses.txt`} target="_blank">
                         License Information
                     </Button>
                 </CardActions>

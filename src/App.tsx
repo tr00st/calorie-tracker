@@ -2,7 +2,7 @@ import './index.css';
 import LogView from './screens/log/LogView';
 import { SupabaseProvider } from './utils/supabase';
 import {
-    createBrowserRouter,
+    createHashRouter,
     RouterProvider,
 } from 'react-router';
 import AuthHandler from './utils/AuthHandler';
@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import FoodsView from './screens/foods/FoodsView';
 import AboutView from './screens/about/AboutView';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: '/',
         Component: Root,
@@ -37,9 +37,7 @@ const router = createBrowserRouter([
             },
         ],
     },
-], {
-    basename: import.meta.env.BASE_URL,
-});
+]);
 
 const theme = createTheme({
     colorSchemes: {
