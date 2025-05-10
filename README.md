@@ -18,14 +18,14 @@ Features include:
 To get set up locally:
 
 * Check out the repository
-* Create a Supabase project
+* Run `npm install` to install dependencies
+* Run `npx supabase db start` to setup a local supabase install
 * Copy `env.local.example` to `env.local` and fill in config items as required
-* Run `npm install`
 * Run `npm run dev`
 
 # Known Issues
 
-- DB schema is currently handled manually - this needs bringing in from Supabase
+- Add here (but don't cause too many...)
 
 # License
 
