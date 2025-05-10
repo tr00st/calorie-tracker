@@ -2,18 +2,13 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import { Delete, Menu as MenuIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
+import { Food } from '../../components/add-quick-log-dialog/FoodSearchBox';
 
 const FoodsViewListItem = ({
-    name,
-    description,
-    calories_p100,
-    id,
+    entity,
     onEntryUpdated,
 }: {
-    name: string;
-    description: string;
-    calories_p100: number;
-    id: string;
+    entity: Food;
     onEntryUpdated: (() => void);
 }) => {
     const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
@@ -31,9 +26,17 @@ const FoodsViewListItem = ({
         await supabase
             .from('foods')
             .delete()
-            .eq('id', id);
+            .eq('id', entity.id);
         onEntryUpdated();
     };
+
+    let label = entity.name;
+    if (entity.type === 'by_weight') {
+        label = `${entity.name}, ${entity.calories_p100}cal/100g`;
+    }
+    else if (entity.type === 'fixed_serving') {
+        label = `${entity.name}, ${entity.calories_fixed}cal/serving`;
+    }
 
     return (
         <ListItem
@@ -44,8 +47,8 @@ const FoodsViewListItem = ({
             )}
         >
             <ListItemText
-                primary={`${name}, ${calories_p100}cal/100g`}
-                secondary={description}
+                primary={label}
+                secondary={entity.description}
                 sx={{ flexGrow: 1 }}
             />
             <Menu

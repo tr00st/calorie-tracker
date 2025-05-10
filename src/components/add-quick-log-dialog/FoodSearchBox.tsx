@@ -5,9 +5,12 @@ import { CircularProgress, TextField } from '@mui/material';
 
 export type Food = {
     id: string;
-    calories_p100: number;
-    serving_grams: number;
+    calories_p100: number | null;
+    serving_grams: number | null;
+    calories_fixed: number | null;
+    type: 'by_weight' | 'fixed_serving';
     name: string;
+    description: string;
 };
 
 const FoodSearchBox = ({

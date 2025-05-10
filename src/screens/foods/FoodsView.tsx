@@ -5,9 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { TransitionGroup } from 'react-transition-group';
 import FoodsViewListItem from './FoodsViewListItem';
 import AddFoodDialog from '../../components/add-food-dialog.tsx/AddFoodDialog';
+import { Food } from '../../components/add-quick-log-dialog/FoodSearchBox';
 
 function FoodsView() {
-    const [listEntries, setLogEntries] = useState<any[] | null>(null);
+    const [listEntries, setLogEntries] = useState<Food[] | null>(null);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const client = useSupabase();
 
@@ -33,10 +34,10 @@ function FoodsView() {
                 </Backdrop>
                 <TransitionGroup>
                     {listEntries
-                        ?.map((listEntry: { name: string; description: string; calories_p100: number; id: string }) => (
+                        ?.map((listEntry: Food) => (
                             <Collapse>
                                 <FoodsViewListItem
-                                    {...listEntry}
+                                    entity={listEntry}
                                     key={listEntry.id}
                                     onEntryUpdated={getFoodListEntries}
                                 />

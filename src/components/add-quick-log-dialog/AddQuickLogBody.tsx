@@ -65,7 +65,12 @@ const AddQuickLogBody = ({
 
     useEffect(() => {
         if (baseFood !== null) {
-            setFoodAmount(baseFood.serving_grams.toString());
+            if (baseFood.serving_grams !== null) {
+                setFoodAmount(baseFood.serving_grams.toString());
+            }
+            else if (baseFood.calories_fixed !== null) {
+                setCalories(baseFood.calories_fixed.toString());
+            }
             setDescription(baseFood.name);
         }
         else {
@@ -76,8 +81,10 @@ const AddQuickLogBody = ({
     }, [baseFood]);
 
     useEffect(() => {
-        if (usingFoodPicker && baseFood !== null && isValidFoodAmountValue(foodAmount)) {
-            setCalories((Number(foodAmount) * baseFood.calories_p100 / 100).toString());
+        if (usingFoodPicker && baseFood !== null) {
+            if (isValidFoodAmountValue(foodAmount) && baseFood.calories_p100) {
+                setCalories((Number(foodAmount) * baseFood.calories_p100 / 100).toString());
+            }
         }
     }, [baseFood, foodAmount, usingFoodPicker]);
 
@@ -100,15 +107,19 @@ const AddQuickLogBody = ({
                     />
                     <Collapse in={usingFoodPicker} unmountOnExit>
                         <Stack direction="column" spacing={1} marginTop={1}>
-                            <TextField
-                                label="Amount (g)"
-                                autoFocus
-                                required
-                                value={foodAmount}
-                                onChange={event => setFoodAmount(event.target.value)}
-                                type="number"
-                                onKeyDown={handleSaveOnEnterKey}
-                            />
+                            <Collapse in={baseFood?.type === 'by_weight'}>
+                                <Stack direction="column" spacing={1} marginTop={1}>
+                                    <TextField
+                                        label="Amount (g)"
+                                        autoFocus
+                                        required
+                                        value={foodAmount}
+                                        onChange={event => setFoodAmount(event.target.value)}
+                                        type="number"
+                                        onKeyDown={handleSaveOnEnterKey}
+                                    />
+                                </Stack>
+                            </Collapse>
                             <TextField
                                 disabled
                                 label="Calculated Calories"
