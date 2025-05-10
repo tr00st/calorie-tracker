@@ -64,6 +64,7 @@ const LogViewListItem = ({
                 <DialogTitle>Permantly Delete Entry?</DialogTitle>
                 <DialogContent>
                     Are you sure you want to delete this entry?
+                    <br />
                     <strong>This is permanent, and cannot be undone.</strong>
                 </DialogContent>
                 <DialogActions>
