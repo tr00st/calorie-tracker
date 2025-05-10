@@ -14,7 +14,7 @@ export default function AuthHandler({ children }: { children: React.ReactNode })
         return (
             <Box>
                 <Typography variant="h5">
-                    Calorie Tracker Xtreme
+                    Calorie Tracker
                 </Typography>
                 <Auth
                     supabaseClient={supabase}

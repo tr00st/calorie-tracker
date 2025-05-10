@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { Delete, Menu as MenuIcon } from '@mui/icons-material';
+import { Delete, MoreHoriz } from '@mui/icons-material';
 import { useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
 import { Food, FoodType } from '../../types/foods';
@@ -42,9 +42,10 @@ const FoodsViewListItem = ({
         <ListItem
             secondaryAction={(
                 <IconButton onClick={e => setMenuAnchorElement(e.currentTarget)}>
-                    <MenuIcon />
+                    <MoreHoriz />
                 </IconButton>
             )}
+            sx={{ borderBottom: '1px #f5f5f5 solid' }}
         >
             <ListItemText
                 primary={label}

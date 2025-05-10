@@ -1,7 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { Delete, Menu as MenuIcon } from '@mui/icons-material';
+import { Delete, MoreHoriz } from '@mui/icons-material';
 import { useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
+import { DateTime } from 'luxon';
 
 const LogViewListItem = ({
     label,
@@ -35,17 +36,20 @@ const LogViewListItem = ({
         onEntryUpdated();
     };
 
+    const displayTime = DateTime.fromISO(timestamp).toLocaleString(DateTime.TIME_SIMPLE);
+
     return (
         <ListItem
             secondaryAction={(
                 <IconButton onClick={e => setMenuAnchorElement(e.currentTarget)}>
-                    <MenuIcon />
+                    <MoreHoriz />
                 </IconButton>
             )}
+            sx={{ borderBottom: '1px #f5f5f5 solid' }}
         >
             <ListItemText
-                primary={`${label}, ${calorie_count}cal`}
-                secondary={timestamp}
+                primary={`${label}`}
+                secondary={`${calorie_count}cal, ${displayTime}`}
                 sx={{ flexGrow: 1 }}
             />
             <Menu

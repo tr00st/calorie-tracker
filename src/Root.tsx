@@ -27,7 +27,7 @@ const Root = () => {
                                 <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                Calorie Counter Xtreme
+                                Calorie Counter
                             </Typography>
                         </Toolbar>
                     </AppBar>
