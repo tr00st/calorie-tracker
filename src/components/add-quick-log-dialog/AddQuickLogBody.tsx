@@ -3,7 +3,8 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
-import FoodSearchBox, { Food } from './FoodSearchBox';
+import FoodSearchBox from './FoodSearchBox';
+import { Food, FoodType } from '../../types/foods';
 
 const AddQuickLogBody = ({
     onClose,
@@ -107,7 +108,7 @@ const AddQuickLogBody = ({
                     />
                     <Collapse in={usingFoodPicker} unmountOnExit>
                         <Stack direction="column" spacing={1} marginTop={1}>
-                            <Collapse in={baseFood?.type === 'by_weight'}>
+                            <Collapse in={baseFood?.type === FoodType.BY_WEIGHT}>
                                 <Stack direction="column" spacing={1} marginTop={1}>
                                     <TextField
                                         label="Amount (g)"

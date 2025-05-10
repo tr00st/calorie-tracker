@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { TransitionGroup } from 'react-transition-group';
 import FoodsViewListItem from './FoodsViewListItem';
 import AddFoodDialog from '../../components/add-food-dialog.tsx/AddFoodDialog';
-import { Food } from '../../components/add-quick-log-dialog/FoodSearchBox';
+import { Food } from '../../types/foods';
 
 function FoodsView() {
     const [listEntries, setLogEntries] = useState<Food[] | null>(null);

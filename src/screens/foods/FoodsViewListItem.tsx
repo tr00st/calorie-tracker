@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import { Delete, Menu as MenuIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
-import { Food } from '../../components/add-quick-log-dialog/FoodSearchBox';
+import { Food, FoodType } from '../../types/foods';
 
 const FoodsViewListItem = ({
     entity,
@@ -31,7 +31,7 @@ const FoodsViewListItem = ({
     };
 
     let label = entity.name;
-    if (entity.type === 'by_weight') {
+    if (entity.type === FoodType.BY_WEIGHT) {
         label = `${entity.name}, ${entity.calories_p100}cal/100g`;
     }
     else if (entity.type === 'fixed_serving') {
