@@ -30,7 +30,7 @@ function LogView() {
             `)
             .gte('timestamp', filterDate)
             .lt('timestamp', filterDate.endOf('day'));
-        console.log('Logs loaded: ', data);
+
         setLogEntries(data);
     }, [client, filterDate]);
 
@@ -46,7 +46,6 @@ function LogView() {
 
     const handleTouchStart = (e: React.TouchEvent<HTMLUListElement>) => {
         const touch = e.touches[0];
-        console.log(touch);
         setTouchStartX(touch.clientX);
         setTouchStartY(touch.clientY);
     };

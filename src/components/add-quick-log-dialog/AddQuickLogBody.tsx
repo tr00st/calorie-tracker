@@ -1,8 +1,9 @@
-import { Button, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material';
+import { Button, Collapse, DialogActions, DialogContent, DialogTitle, Divider, FormLabel, Stack, TextField } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
+import FoodSearchBox, { Food } from './FoodSearchBox';
 
 const AddQuickLogBody = ({
     onClose,
@@ -22,22 +23,17 @@ const AddQuickLogBody = ({
 
     const [timestamp, setTimestamp] = useState<DateTime | null>(combinedDateTime);
     const [description, setDescription] = useState<string>('');
+
     const [calories, setCalories] = useState<string>('');
-    const caloriesRegex = /^[0-9]+$/;
     const isValidCalorieValue = (value: string) => {
-        return caloriesRegex.test(value);
+        return Number(value) !== 0;
     };
 
-    /* For later - loading foods to pick from. */
-    // const [foods, setFoods] = useState<any>([]);
-    // async function getFoods() {
-    //     const { data } = await client.from("foods").select();
-    //     console.log('Foods loaded: ', data);
-    //     setFoods(data);
-    // }
-    // useEffect(() => {
-    //     getFoods();
-    // }, []);
+    const [baseFood, setBaseFood] = useState<Food | null>(null);
+    const [foodAmount, setFoodAmount] = useState<string>('');
+    const isValidFoodAmountValue = (value: string) => {
+        return Number(value) > 0;
+    };
 
     const supabase = useSupabase();
 
@@ -64,6 +60,29 @@ const AddQuickLogBody = ({
         }
     };
 
+    const usingQuickSet = Boolean(isValidCalorieValue(calories) && (baseFood === null));
+    const usingFoodPicker = Boolean(baseFood !== null);
+
+    useEffect(() => {
+        if (baseFood !== null) {
+            setFoodAmount(baseFood.serving_grams.toString());
+            setDescription(baseFood.name);
+        }
+        else {
+            setFoodAmount('');
+            setCalories('');
+            setDescription('');
+        }
+    }, [baseFood]);
+
+    useEffect(() => {
+        if (usingFoodPicker && baseFood !== null && isValidFoodAmountValue(foodAmount)) {
+            setCalories((Number(foodAmount) * baseFood.calories_p100 / 100).toString());
+        }
+    }, [baseFood, foodAmount, usingFoodPicker]);
+
+    const canSubmit = (usingQuickSet && isValidCalorieValue(calories)) || (usingFoodPicker && isValidFoodAmountValue(foodAmount));
+
     return (
         <>
             <DialogTitle>
@@ -72,15 +91,48 @@ const AddQuickLogBody = ({
             <DialogContent sx={{ paddingTop: '1em!important' }}>
                 <Stack spacing={1}>
                     <TimePicker value={timestamp} onChange={newValue => setTimestamp(newValue)} />
-                    <TextField
-                        label="Quick Set Calories"
-                        autoFocus
-                        required
-                        value={calories}
-                        onChange={event => setCalories(event.target.value)}
-                        type="number"
-                        onKeyDown={handleSaveOnEnterKey}
+                    <Divider />
+
+                    <FoodSearchBox
+                        value={baseFood}
+                        onChange={food => setBaseFood(food)}
+                        disabled={usingQuickSet}
                     />
+                    <Collapse in={usingFoodPicker} unmountOnExit>
+                        <Stack direction="column" spacing={1} marginTop={1}>
+                            <TextField
+                                label="Amount (g)"
+                                autoFocus
+                                required
+                                value={foodAmount}
+                                onChange={event => setFoodAmount(event.target.value)}
+                                type="number"
+                                onKeyDown={handleSaveOnEnterKey}
+                            />
+                            <TextField
+                                disabled
+                                label="Calculated Calories"
+                                value={calories}
+                                type="number"
+                            />
+                        </Stack>
+                    </Collapse>
+
+                    <Collapse in={!usingFoodPicker} unmountOnExit>
+                        <Stack direction="column" spacing={1} marginTop={1}>
+                            <FormLabel>Or...</FormLabel>
+                            <TextField
+                                label="Quick Set Calories"
+                                autoFocus
+                                required
+                                value={calories}
+                                onChange={event => setCalories(event.target.value)}
+                                type="number"
+                                onKeyDown={handleSaveOnEnterKey}
+                            />
+                        </Stack>
+                    </Collapse>
+                    <Divider />
                     <TextField
                         label="Description"
                         value={description}
@@ -90,7 +142,7 @@ const AddQuickLogBody = ({
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" disabled={!isValidCalorieValue(calories)} onClick={() => addEntry()}>Add</Button>
+                <Button variant="contained" disabled={!canSubmit} onClick={() => addEntry()}>Add</Button>
                 <Button onClick={() => onClose()}>Cancel</Button>
             </DialogActions>
         </>
