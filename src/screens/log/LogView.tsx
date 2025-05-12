@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
-import { AppBar, Backdrop, CircularProgress, Collapse, Divider, Fab, List, ListItem, ListItemText, Stack } from '@mui/material';
+import { AppBar, Backdrop, CircularProgress, Collapse, Divider, Fab, List } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogDialog from '../../components/add-quick-log-dialog/AddQuickLogDialog';
 import CurrentDatePicker from './CurrentDatePicker';
 import { DateTime } from 'luxon';
 import { TransitionGroup } from 'react-transition-group';
-import FadeBetweenValues from '../../utils/FadeBetweenValues';
 import LogViewListItem from './LogViewListItem';
+import DailyCalorieTotal from './DailyCalorieTotal';
 
 function LogView() {
     const [logEntries, setLogEntries] = useState<any[] | null>(null);
@@ -72,14 +72,7 @@ function LogView() {
                 <CurrentDatePicker selectedDate={filterDate} onChange={(newValue: DateTime) => setFilterDate(newValue)} />
             </AppBar>
             <List sx={{ flexGrow: 1 }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-                <ListItem>
-                    <ListItemText>
-                        <Stack direction="row" gap="0.3rem">
-                            <span>Total Calories Consumed:</span>
-                            <FadeBetweenValues value={caloriesForDay} />
-                        </Stack>
-                    </ListItemText>
-                </ListItem>
+                <DailyCalorieTotal caloriesForDay={caloriesForDay} />
                 <Divider />
                 <Backdrop open={logEntries === null} sx={{ position: 'absolute', padding: '5rem', alignItems: 'start' }} invisible>
                     <CircularProgress />
