@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 type SupabaseContextData = {
     client: SupabaseClient;
@@ -13,7 +13,7 @@ export const SupabaseProvider = ({ children }: { children: React.ReactNode }) =>
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = useMemo(() => createClient(supabaseUrl, supabaseKey), [supabaseUrl, supabaseKey]);
 
     return (
         <SupabaseContext.Provider value={{
