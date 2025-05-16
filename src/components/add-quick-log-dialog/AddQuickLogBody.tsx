@@ -83,13 +83,24 @@ const AddQuickLogBody = ({
 
     useEffect(() => {
         if (usingFoodPicker && baseFood !== null) {
-            if (isValidFoodAmountValue(foodAmount) && baseFood.calories_p100) {
-                setCalories((Number(foodAmount) * baseFood.calories_p100 / 100).toString());
+            if (baseFood.type === FoodType.BY_WEIGHT) {
+                if (isValidFoodAmountValue(foodAmount) && baseFood.calories_p100) {
+                    setCalories((Number(foodAmount) * baseFood.calories_p100 / 100).toString());
+                }
+            }
+            else if (baseFood.calories_fixed !== null) {
+                setCalories(baseFood.calories_fixed.toString());
             }
         }
     }, [baseFood, foodAmount, usingFoodPicker]);
 
-    const canSubmit = (usingQuickSet && isValidCalorieValue(calories)) || (usingFoodPicker && isValidFoodAmountValue(foodAmount));
+    let canSubmit = false;
+    if (usingQuickSet) {
+        canSubmit = isValidCalorieValue(calories);
+    }
+    else if (usingFoodPicker) {
+        canSubmit = baseFood?.type === FoodType.FIXED_SERVING || isValidFoodAmountValue(foodAmount);
+    }
 
     return (
         <>
