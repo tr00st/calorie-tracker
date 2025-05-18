@@ -1,39 +1,36 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { Delete, MoreHoriz } from '@mui/icons-material';
 import { useState } from 'react';
-import { useSupabase } from '../../utils/supabase';
 import { DateTime } from 'luxon';
+import { useDeleteLogEntryMutation } from '../../utils/queries';
 
 const LogViewListItem = ({
     label,
     calorie_count,
     timestamp,
     id,
-    onEntryUpdated,
 }: {
     label: string;
     calorie_count: number;
     timestamp: string;
     id: string;
-    onEntryUpdated: (() => void);
 }) => {
     const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
     const menuIsOpen = Boolean(menuAnchorElement);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-    const supabase = useSupabase();
 
     const handleDelete = () => {
         setMenuAnchorElement(null);
         setDeleteConfirmationOpen(true);
     };
 
+    const mutation = useDeleteLogEntryMutation();
     const runDelete = async () => {
         setDeleteConfirmationOpen(false);
-        await supabase
-            .from('log_entries')
-            .delete()
-            .eq('id', id);
-        onEntryUpdated();
+        mutation.mutate({
+            id,
+            timestamp,
+        });
     };
 
     const displayTime = DateTime.fromISO(timestamp).toLocaleString(DateTime.TIME_SIMPLE);

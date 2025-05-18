@@ -5,12 +5,10 @@ import { DateTime } from 'luxon';
 const AddQuickLogDialog = ({
     open,
     onClose,
-    onLogAdded,
     entryDate,
 }: {
     open: boolean;
     onClose: (() => void);
-    onLogAdded: (() => void);
     entryDate: DateTime;
 }) => {
     const handleCloseEvent = (_event: object, reason: string) => {
@@ -23,7 +21,7 @@ const AddQuickLogDialog = ({
     };
     return (
         <Dialog open={open} onClose={handleCloseEvent} disableRestoreFocus>
-            <AddQuickLogBody onClose={onClose} onLogAdded={onLogAdded} entryDate={entryDate} />
+            <AddQuickLogBody onClose={onClose} entryDate={entryDate} />
         </Dialog>
     );
 };

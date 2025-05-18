@@ -1,45 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useSupabase } from '../../utils/supabase';
-import { AppBar, Backdrop, CircularProgress, Collapse, Divider, Fab, List } from '@mui/material';
+import React, { Suspense, useState } from 'react';
+import { AppBar, Backdrop, CircularProgress, Divider, Fab, List } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddQuickLogDialog from '../../components/add-quick-log-dialog/AddQuickLogDialog';
 import CurrentDatePicker from './CurrentDatePicker';
 import { DateTime } from 'luxon';
-import { TransitionGroup } from 'react-transition-group';
-import LogViewListItem from './LogViewListItem';
 import DailyCalorieTotal from './DailyCalorieTotal';
+import LogListItems from './LogListItems';
 
 function LogView() {
-    const [logEntries, setLogEntries] = useState<any[] | null>(null);
     const [showAddDialog, setShowAddDialog] = useState(false);
-    const client = useSupabase();
 
     const todaysDate = DateTime.now().startOf('day');
     const [filterDate, setFilterDate] = useState(todaysDate);
-
-    const getLogEntries = useCallback(async () => {
-        setLogEntries(null);
-        const { data } = await client
-            .from('log_entries')
-            .select(`
-                *,
-                ...foods(
-                food_name:name,
-                food_calories_p100:calories_p100
-                )
-            `)
-            .gte('timestamp', filterDate)
-            .lt('timestamp', filterDate.endOf('day'));
-
-        setLogEntries(data);
-    }, [client, filterDate]);
-
-    useEffect(() => {
-        getLogEntries();
-    }, [getLogEntries]);
-
-    const caloriesForLogEntry = (logEntry: any) => logEntry.calories_override ? logEntry.calories_override : (logEntry.amount * logEntry.food_calories_p100) / 100;
-    const caloriesForDay = logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0);
 
     const [touchStartX, setTouchStartX] = useState<number>(-1);
     const [touchStartY, setTouchStartY] = useState<number>(-1);
@@ -72,38 +44,17 @@ function LogView() {
                 <CurrentDatePicker selectedDate={filterDate} onChange={(newValue: DateTime) => setFilterDate(newValue)} />
             </AppBar>
             <List sx={{ flexGrow: 1 }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-                <DailyCalorieTotal caloriesForDay={caloriesForDay} />
+                <DailyCalorieTotal date={filterDate} />
                 <Divider />
-                <Backdrop open={logEntries === null} sx={{ position: 'absolute', padding: '5rem', alignItems: 'start' }} invisible>
-                    <CircularProgress />
-                </Backdrop>
-                <TransitionGroup>
-                    {logEntries
-                        ?.map((logEntry: any) => {
-                            let label = 'Manual Entry';
-                            if (logEntry.description && logEntry.description !== '') {
-                                label = logEntry.description;
-                            }
-                            else if (logEntry.food_name) {
-                                label = logEntry.food_name;
-                            }
-
-                            return {
-                                ...logEntry,
-                                calorie_count: caloriesForLogEntry(logEntry),
-                                label: label,
-                            };
-                        })
-                        .map((logEntry: { label: string; calorie_count: number; timestamp: string; id: string }) => (
-                            <Collapse>
-                                <LogViewListItem
-                                    {...logEntry}
-                                    key={logEntry.id}
-                                    onEntryUpdated={getLogEntries}
-                                />
-                            </Collapse>
-                        ))}
-                </TransitionGroup>
+                <Suspense
+                    fallback={(
+                        <Backdrop open={true} sx={{ position: 'absolute', padding: '5rem', alignItems: 'start' }} invisible>
+                            <CircularProgress />
+                        </Backdrop>
+                    )}
+                >
+                    <LogListItems filterDate={filterDate} />
+                </Suspense>
             </List>
             <Fab
                 sx={{
@@ -115,7 +66,7 @@ function LogView() {
             >
                 <AddIcon />
             </Fab>
-            <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} onLogAdded={() => getLogEntries()} entryDate={filterDate} />
+            <AddQuickLogDialog open={showAddDialog} onClose={() => setShowAddDialog(false)} entryDate={filterDate} />
         </>
     );
 }

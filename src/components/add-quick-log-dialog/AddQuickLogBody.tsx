@@ -2,17 +2,15 @@ import { Button, Collapse, DialogActions, DialogContent, DialogTitle, Divider, F
 import { TimePicker } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
-import { useSupabase } from '../../utils/supabase';
 import FoodSearchBox from './FoodSearchBox';
 import { Food, FoodType } from '../../types/foods';
+import { useInsertLogEntryMutation } from '../../utils/queries';
 
 const AddQuickLogBody = ({
     onClose,
-    onLogAdded,
     entryDate,
 }: {
     onClose: (() => void);
-    onLogAdded: (() => void);
     entryDate: DateTime;
 }) => {
     const currentDateTime = DateTime.now();
@@ -36,23 +34,15 @@ const AddQuickLogBody = ({
         return Number(value) > 0;
     };
 
-    const supabase = useSupabase();
-
+    const mutation = useInsertLogEntryMutation();
     const addEntry = async () => {
         onClose();
         setCalories(''); // Blank the calories field as soon as we start saving, to prevent duplicates.
-        const { error } = await supabase
-            .from('log_entries')
-            .insert({
-                timestamp: timestamp,
-                calories_override: calories,
-                description: description,
-            });
-
-        if (error) {
-            console.error(error);
-        }
-        onLogAdded();
+        mutation.mutate({
+            timestamp: (timestamp ?? DateTime.now()).toISO() ?? '',
+            calories_override: Number(calories),
+            description: description,
+        });
     };
 
     const handleSaveOnEnterKey = (event: React.KeyboardEvent<HTMLElement>) => {

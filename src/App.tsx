@@ -13,6 +13,7 @@ import Root from './Root';
 import { createTheme, ThemeProvider } from '@mui/material';
 import FoodsView from './screens/foods/FoodsView';
 import AboutView from './screens/about/AboutView';
+import ReactQueryHandler from './utils/ReactQueryHandler';
 
 const router = createHashRouter([
     {
@@ -48,13 +49,15 @@ const theme = createTheme({
 export default function App() {
     return (
         <SupabaseProvider>
-            <ThemeProvider theme={theme}>
-                <LocalizationProvider dateAdapter={AdapterLuxon}>
-                    <AuthHandler>
-                        <RouterProvider router={router} />
-                    </AuthHandler>
-                </LocalizationProvider>
-            </ThemeProvider>
+            <ReactQueryHandler>
+                <ThemeProvider theme={theme}>
+                    <LocalizationProvider dateAdapter={AdapterLuxon}>
+                        <AuthHandler>
+                            <RouterProvider router={router} />
+                        </AuthHandler>
+                    </LocalizationProvider>
+                </ThemeProvider>
+            </ReactQueryHandler>
         </SupabaseProvider>
     );
 }

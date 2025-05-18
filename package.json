@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npx generate-license-file --input package.json --output public/third-party-licenses.txt --overwrite && tsc -b && vite build",
+    "generate-database-types": "supabase gen types typescript --local > src/types/database.types.ts ; npx eslint --fix src/types/database.types.ts",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -18,6 +19,7 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.49.4",
+    "@tanstack/react-query": "^5.76.1",
     "luxon": "^3.6.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
