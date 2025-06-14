@@ -1,5 +1,4 @@
 import { ListItem, ListItemText, Stack } from '@mui/material';
-import FadeBetweenValues from '../../utils/FadeBetweenValues';
 import { DateTime } from 'luxon';
 import { useLogEntriesByDate } from '../../utils/queries';
 import { caloriesForLogEntry } from '../../utils/calorieTools';
@@ -8,7 +7,7 @@ import { Suspense } from 'react';
 const CalorieNumber = ({ date }: { date: DateTime }) => {
     const logEntries = useLogEntriesByDate(date);
     const caloriesForDay = logEntries?.reduce((acc, current) => acc + caloriesForLogEntry(current), 0);
-    return <FadeBetweenValues value={caloriesForDay} />;
+    return <>{ caloriesForDay }</>;
 };
 
 const DailyCalorieTotal = ({ date }: { date: DateTime }) => {
