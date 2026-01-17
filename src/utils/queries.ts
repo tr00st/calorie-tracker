@@ -39,6 +39,27 @@ export const useInsertLogEntryMutation = () => {
     });
 };
 
+export const useUpdateLogEntryMutation = () => {
+    const supabase = useSupabase();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (payload: { id: number; timestamp: string; description?: string; calories_override?: number }) => {
+            return await supabase
+                .from('log_entries')
+                .update({
+                    description: payload.description,
+                    calories_override: payload.calories_override,
+                })
+                .eq('id', payload.id);
+        },
+        onSuccess: (_data, variables) => {
+            const submitDate = DateTime.fromISO(variables.timestamp);
+            queryClient.invalidateQueries({ queryKey: ['log_entries', 'by_date', submitDate.toISODate()] });
+        },
+    });
+};
+
 export const useDeleteLogEntryMutation = () => {
     const supabase = useSupabase();
     const queryClient = useQueryClient();
