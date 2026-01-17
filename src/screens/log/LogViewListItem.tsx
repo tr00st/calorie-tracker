@@ -35,7 +35,7 @@ const LogViewListItem = ({
     const runDelete = async () => {
         setDeleteConfirmationOpen(false);
         mutation.mutate({
-            id,
+            id: Number(id),
             timestamp,
         });
     };

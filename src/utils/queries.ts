@@ -65,7 +65,7 @@ export const useDeleteLogEntryMutation = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (payload: { id: string; timestamp: string }) => await supabase
+        mutationFn: async (payload: { id: number; timestamp: string }) => await supabase
             .from('log_entries')
             .delete()
             .eq('id', payload.id),

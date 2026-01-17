@@ -19,7 +19,7 @@ const EditQuickLogBody = ({
     const [calories, setCalories] = useState<string>(initialCalories.toString());
 
     const isValidCalorieValue = (value: string) => {
-        return Number(value) > 0;
+        return Number(value) !== 0;
     };
 
     const mutation = useUpdateLogEntryMutation();
@@ -34,7 +34,7 @@ const EditQuickLogBody = ({
     };
 
     const handleSaveOnEnterKey = (event: React.KeyboardEvent<HTMLElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && canSubmit) {
             updateEntry();
         }
     };
