@@ -23,6 +23,23 @@ To get set up locally:
 * Copy `env.local.example` to `env.local` and fill in config items as required
 * Run `npm run dev`
 
+## Testing
+
+The project includes comprehensive testing infrastructure:
+
+* **Unit tests** with Vitest and React Testing Library
+* **Component testing** with Storybook
+* **Mocked Supabase** for sandboxed testing
+
+For detailed testing documentation, see [TESTING.md](./TESTING.md).
+
+Quick commands:
+```bash
+npm test              # Run unit tests
+npm run storybook     # Start Storybook component explorer
+npx vitest --project=storybook  # Run Storybook tests with Vitest
+```
+
 # Known Issues
 
 - Add here (but don't cause too many...)

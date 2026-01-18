@@ -12,6 +12,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
+    "test:storybook": "vitest --config vitest.storybook.config.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
