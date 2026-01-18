@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .eslintcache
 public/third-party-licenses.txt
+
+*storybook.log
+storybook-static
