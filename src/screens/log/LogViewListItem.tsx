@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { Delete, MoreHoriz } from '@mui/icons-material';
+import { Delete, Edit, MoreHoriz } from '@mui/icons-material';
 import { useState } from 'react';
 import { DateTime } from 'luxon';
 import { useDeleteLogEntryMutation } from '../../utils/queries';
+import EditQuickLogDialog from '../../components/edit-quick-log-dialog/EditQuickLogDialog';
 
 const LogViewListItem = ({
     label,
@@ -18,6 +19,12 @@ const LogViewListItem = ({
     const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
     const menuIsOpen = Boolean(menuAnchorElement);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+    const handleEdit = () => {
+        setMenuAnchorElement(null);
+        setEditDialogOpen(true);
+    };
 
     const handleDelete = () => {
         setMenuAnchorElement(null);
@@ -28,7 +35,7 @@ const LogViewListItem = ({
     const runDelete = async () => {
         setDeleteConfirmationOpen(false);
         mutation.mutate({
-            id,
+            id: Number(id),
             timestamp,
         });
     };
@@ -54,6 +61,12 @@ const LogViewListItem = ({
                 onClose={() => setMenuAnchorElement(null)}
                 anchorEl={menuAnchorElement}
             >
+                <MenuItem onClick={handleEdit}>
+                    <ListItemIcon>
+                        <Edit />
+                    </ListItemIcon>
+                    Edit
+                </MenuItem>
                 <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
                         <Delete />
@@ -77,6 +90,14 @@ const LogViewListItem = ({
                     </Button>
                 </DialogActions>
             </Dialog>
+            <EditQuickLogDialog
+                open={editDialogOpen}
+                onClose={() => setEditDialogOpen(false)}
+                id={Number(id)}
+                timestamp={timestamp}
+                initialLabel={label}
+                initialCalories={calorie_count}
+            />
         </ListItem>
     );
 };
