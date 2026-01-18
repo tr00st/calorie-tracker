@@ -22,7 +22,12 @@ export default defineConfig({
     browser: {
       enabled: true,
       headless: true,
-      provider: playwright({}),
+      provider: playwright({
+        // Playwright configuration for better test stability
+        launchOptions: {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        },
+      }),
       instances: [{
         browser: 'chromium'
       }]

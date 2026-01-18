@@ -105,13 +105,15 @@ export const createMockDevSupabaseClient = (): SupabaseClient<Database> => {
     };
 
     // Override the from method to return our mock query builder
-    const originalFrom = baseClient.from.bind(baseClient);
-    
     baseClient.from = ((table: string) => {
+        // Type-safe table access
+        type MockDataKey = keyof typeof mockData;
+        const isValidTable = (t: string): t is MockDataKey => t in mockData;
+        
         const chain: any = {
             select: (columns = '*') => {
                 // Return the appropriate mock data
-                const data = mockData[table as keyof typeof mockData] || [];
+                const data = isValidTable(table) ? mockData[table] : [];
                 
                 return {
                     ...chain,
@@ -142,11 +144,13 @@ export const createMockDevSupabaseClient = (): SupabaseClient<Database> => {
                 };
             },
             insert: (values: any) => {
-                const tableData = mockData[table as keyof typeof mockData];
-                if (Array.isArray(tableData)) {
-                    const newId = Math.max(...tableData.map((item: any) => item.id || 0)) + 1;
-                    const newItem = { ...values, id: newId, created_at: new Date().toISOString() };
-                    tableData.push(newItem);
+                if (isValidTable(table)) {
+                    const tableData = mockData[table];
+                    if (Array.isArray(tableData)) {
+                        const newId = Math.max(...tableData.map((item: any) => item.id || 0)) + 1;
+                        const newItem = { ...values, id: newId, created_at: new Date().toISOString() };
+                        tableData.push(newItem);
+                    }
                 }
                 return {
                     ...chain,
@@ -161,11 +165,13 @@ export const createMockDevSupabaseClient = (): SupabaseClient<Database> => {
                 return {
                     ...chain,
                     eq: (column: string, value: any) => {
-                        const tableData = mockData[table as keyof typeof mockData];
-                        if (Array.isArray(tableData)) {
-                            const index = tableData.findIndex((item: any) => item[column] === value);
-                            if (index >= 0) {
-                                tableData[index] = { ...tableData[index], ...values };
+                        if (isValidTable(table)) {
+                            const tableData = mockData[table];
+                            if (Array.isArray(tableData)) {
+                                const index = tableData.findIndex((item: any) => item[column] === value);
+                                if (index >= 0) {
+                                    tableData[index] = { ...tableData[index], ...values };
+                                }
                             }
                         }
                         return {
@@ -183,11 +189,13 @@ export const createMockDevSupabaseClient = (): SupabaseClient<Database> => {
                 return {
                     ...chain,
                     eq: (column: string, value: any) => {
-                        const tableData = mockData[table as keyof typeof mockData];
-                        if (Array.isArray(tableData)) {
-                            const index = tableData.findIndex((item: any) => item[column] === value);
-                            if (index >= 0) {
-                                tableData.splice(index, 1);
+                        if (isValidTable(table)) {
+                            const tableData = mockData[table];
+                            if (Array.isArray(tableData)) {
+                                const index = tableData.findIndex((item: any) => item[column] === value);
+                                if (index >= 0) {
+                                    tableData.splice(index, 1);
+                                }
                             }
                         }
                         return {
