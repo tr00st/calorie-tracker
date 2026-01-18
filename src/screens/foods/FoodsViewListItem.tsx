@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { Delete, MoreHoriz } from '@mui/icons-material';
+import { Delete, Edit, MoreHoriz } from '@mui/icons-material';
 import { useState } from 'react';
 import { useSupabase } from '../../utils/supabase';
 import { Food, FoodType } from '../../types/foods';
+import EditFoodDialog from '../../components/edit-food-dialog/EditFoodDialog';
 
 const FoodsViewListItem = ({
     entity,
@@ -14,11 +15,17 @@ const FoodsViewListItem = ({
     const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
     const menuIsOpen = Boolean(menuAnchorElement);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
     const supabase = useSupabase();
 
     const handleDelete = () => {
         setMenuAnchorElement(null);
         setDeleteConfirmationOpen(true);
+    };
+
+    const handleEdit = () => {
+        setMenuAnchorElement(null);
+        setEditDialogOpen(true);
     };
 
     const runDelete = async () => {
@@ -57,6 +64,12 @@ const FoodsViewListItem = ({
                 onClose={() => setMenuAnchorElement(null)}
                 anchorEl={menuAnchorElement}
             >
+                <MenuItem onClick={handleEdit}>
+                    <ListItemIcon>
+                        <Edit />
+                    </ListItemIcon>
+                    Edit
+                </MenuItem>
                 <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
                         <Delete />
@@ -79,6 +92,12 @@ const FoodsViewListItem = ({
                     </Button>
                 </DialogActions>
             </Dialog>
+            <EditFoodDialog
+                open={editDialogOpen}
+                onClose={() => setEditDialogOpen(false)}
+                onFoodUpdated={onEntryUpdated}
+                food={entity}
+            />
         </ListItem>
     );
 };
