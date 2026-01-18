@@ -35,6 +35,13 @@ Run tests with coverage:
 npm run test:coverage
 ```
 
+This will generate coverage reports in multiple formats:
+- **HTML**: Open `coverage/index.html` in your browser for an interactive report
+- **Terminal**: Shows summary in console
+- **LCOV**: Used by CI tools and code coverage services
+
+Coverage thresholds are set at 70% for lines, functions, branches, and statements.
+
 ### Storybook Component Testing
 
 Start Storybook dev server:
@@ -56,6 +63,58 @@ This will run all your stories as tests, checking for:
 - Component rendering without errors
 - Accessibility violations (via @storybook/addon-a11y)
 - Visual consistency
+
+### Viewing Storybook on GitHub Pages
+
+Storybook is automatically deployed to GitHub Pages when changes are merged to the main branch.
+
+Access the deployed Storybook at:
+```
+https://<your-github-username>.github.io/<repository-name>/storybook/
+```
+
+For this repository:
+```
+https://tr00st.github.io/calorie-tracker/storybook/
+```
+
+## Code Coverage
+
+The project uses Vitest's built-in code coverage with the v8 provider.
+
+### Viewing Coverage Reports
+
+After running `npm run test:coverage`, open the HTML report:
+```bash
+open coverage/index.html  # macOS
+xdg-open coverage/index.html  # Linux
+start coverage/index.html  # Windows
+```
+
+The HTML report provides:
+- Line-by-line coverage visualization
+- File-by-file breakdown
+- Branch coverage details
+- Function coverage metrics
+
+### Coverage Configuration
+
+Coverage thresholds are set to 70% for:
+- Lines
+- Functions
+- Branches
+- Statements
+
+Excluded from coverage:
+- Test files (`*.test.tsx`, `*.stories.tsx`)
+- Test utilities (`src/test/`)
+- Type definitions (`*.d.ts`)
+- Configuration files
+- Storybook files
+
+### CI/CD Coverage
+
+Coverage reports are generated in CI and can be integrated with code coverage services like Codecov or Coveralls by using the LCOV report format (`coverage/lcov.info`).
 
 ## Mocking Supabase
 

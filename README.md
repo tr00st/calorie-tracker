@@ -29,16 +29,21 @@ The project includes comprehensive testing infrastructure:
 
 * **Unit tests** with Vitest and React Testing Library
 * **Component testing** with Storybook
+* **Code coverage** reporting with v8
 * **Mocked Supabase** for sandboxed testing
 
 For detailed testing documentation, see [TESTING.md](./TESTING.md).
 
 Quick commands:
 ```bash
-npm test              # Run unit tests
-npm run storybook     # Start Storybook component explorer
-npx vitest --project=storybook  # Run Storybook tests with Vitest
+npm test                          # Run unit tests
+npm run test:coverage             # Run tests with coverage report
+npm run storybook                 # Start Storybook component explorer
+npm run build-storybook           # Build Storybook for deployment
+npx vitest --project=storybook    # Run Storybook tests with Vitest
 ```
+
+**View Storybook online**: Storybook is automatically deployed to [GitHub Pages](https://tr00st.github.io/calorie-tracker/storybook/) when changes are merged to main.
 
 # Known Issues
 
