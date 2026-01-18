@@ -143,9 +143,9 @@ describe('EditFoodBody', () => {
                 calories_fixed: null,
             });
             expect(mockEq).toHaveBeenCalledWith('id', 'food-123');
+            expect(mockOnClose).toHaveBeenCalled();
+            expect(mockOnFoodUpdated).toHaveBeenCalled();
         });
-        expect(mockOnClose).toHaveBeenCalled();
-        expect(mockOnFoodUpdated).toHaveBeenCalled();
     });
 
     it('calls update with correct values on Save click for fixed-serving food', async () => {
@@ -172,9 +172,9 @@ describe('EditFoodBody', () => {
                 calories_fixed: '200',
             });
             expect(mockEq).toHaveBeenCalledWith('id', 'food-456');
+            expect(mockOnClose).toHaveBeenCalled();
+            expect(mockOnFoodUpdated).toHaveBeenCalled();
         });
-        expect(mockOnClose).toHaveBeenCalled();
-        expect(mockOnFoodUpdated).toHaveBeenCalled();
     });
 
     it('closes dialog on Cancel click', async () => {
@@ -197,8 +197,19 @@ describe('EditFoodBody', () => {
 
         await waitFor(() => {
             expect(mockUpdate).toHaveBeenCalled();
+            expect(mockOnClose).toHaveBeenCalled();
         });
-        expect(mockOnClose).toHaveBeenCalled();
+    });
+
+    it('does not submit on Enter key press when form is invalid', async () => {
+        render(<EditFoodBody onClose={mockOnClose} onFoodUpdated={mockOnFoodUpdated} food={byWeightFood} />);
+
+        const caloriesInput = screen.getByLabelText(/Calories per 100g/);
+        await userEvent.clear(caloriesInput);
+        await userEvent.type(caloriesInput, 'abc{Enter}');
+
+        expect(mockUpdate).not.toHaveBeenCalled();
+        expect(mockOnClose).not.toHaveBeenCalled();
     });
 
     it('switches between serving types correctly', async () => {

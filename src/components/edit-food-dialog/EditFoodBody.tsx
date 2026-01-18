@@ -29,7 +29,6 @@ const EditFoodBody = ({
     const supabase = useSupabase();
 
     const updateEntry = async () => {
-        onClose();
         const { error } = await supabase
             .from('foods')
             .update({
@@ -45,11 +44,14 @@ const EditFoodBody = ({
         if (error) {
             console.error(error);
         }
-        onFoodUpdated();
+        else {
+            onClose();
+            onFoodUpdated();
+        }
     };
 
     const handleSaveOnEnterKey = (event: React.KeyboardEvent<HTMLElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && isValidCalorieValue(calories)) {
             updateEntry();
         }
     };
